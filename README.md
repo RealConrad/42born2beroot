@@ -10,8 +10,11 @@
   1. Go to the root directory using `su -` and login
   2. Install Sudo `apt install sudo`
   3. Add a group called `user42` using `groupadd`
-  4. Add the user to the newly created group `usermod -aG user42,sudo cwenz`
-  > a = append user to group
-  > g = the group to which the user gets added to
+  4. Add the user to the newly created group (adds user to 2 groups) `usermod -aG user42,sudo cwenz`
+  > a = append user to group \
+  > g = the group to which the user gets added to \
   > To remove a user from a group: `deluser ${user} ${group}
-  5. To view if the user was added: `getent group user42`
+  6. To view if the user was added: `getent group user42`
+  7. Install `Git` using `apt-get install git -y`
+  > You should see a version number if its installed correctly by using: `git --version`
+  8. 
