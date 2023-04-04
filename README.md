@@ -10,8 +10,7 @@
   1. Go to the root directory using `su -` and login.
   2. Install Sudo `apt install sudo`.
   3. Add a group called `user42`.
-  4. After installing sudo, add the user to the group “usermod -aG sudo cwenz”
   > a = append user to group 
-  g = the group to which the user gets added to 
-  To remove a user from a group: `deluser ${user} ${group}
-  5. To view if the user was added: `getent group user42`
+  > g = the group to which the user gets added to 
+  > To remove a user from a group: `deluser ${user} ${group}
+  4. To view if the user was added: `getent group user42`
