@@ -20,7 +20,7 @@
   > You should see a version number if its installed correctly by using: `git --version`
   8. Install SSH via `sudo apt install openssh-server`
   > Check to see if it installed correctly: `systemctl status ssh`
-  9. Change the `#port` to `4242` (remember to remove `#`) and `#PermitRootLogin` to  `no` in `sshd_config` file via the command `vim /etc/ssh/sshd_config`
+  9. Change the port to `4242` (remember to remove `#`) and `#PermitRootLogin` to  `no` in `sshd_config` file via the command `vim /etc/ssh/sshd_config`
   > Once in VIM, press 'i' to go into 'insert mode' \
   > To exit 'Insest mode' press 'ESC' and to save and quit `:wq` \
   > Type `sudo grep Port /etc/ssh/sshd_config` to check if the port settings are correct, it should be `Port 4242`
