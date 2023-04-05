@@ -24,3 +24,12 @@
   > To exit 'Insest mode' press 'ESC' and to save and quit `:wq` \
   > Type `sudo grep Port /etc/ssh/sshd_config` to check if the port settings are correct, it should be `Port 4242`
   10. Restart the ssh server via `systemctl restart ssh`
+  > Check the status via `systemctl ssh status`
+  11. Now you can connect your own PC's terminal to the VM. Run `ssh username@127.0.0.1 -p 4242`
+  > If you get any errors, try: `rm ~/.ssh/known_hosts` and try again
+  12. Run `exit` to close your connection
+  13. Edit the file via `vim /etc/security/pwquality.conf` according to the subject
+  14. Include the following at the file `vim /etc/pam.d/common-password`:
+  > \# Words are spaces with tabs \
+  > password   requisite   pam_pwquality.so \
+  > The above takes the changes at `pwquality.conf` and applies it to the password policy
