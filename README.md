@@ -16,6 +16,7 @@
   > To remove a user from a group: `deluser ${user} ${group}
   6. To view if the user was added: `getent group user42`
   7. Install `Git` using `apt-get install git -y`
+  > The `-y` tag means that you agree to all prompts that you would normally have to manually agree to \
   > You should see a version number if its installed correctly by using: `git --version`
   8. Install SSH via `sudo apt install openssh-server`
   > Check to see if it installed correctly: `systemctl status ssh`
@@ -49,3 +50,36 @@
   > to view all users: `cut -d: -f1 /etc/passwd` \
   > To add a new user: `sudo adduser new_username`\
   > To view which groups your user is part of: `groups`
+ ## Configure Sudo Policy
+  1. Run `visudo`
+  2. Add the following:
+  ```
+  # Resets terminal environment to remove any user variable.
+  Defaults	env_reset
+  # Sends a mail of bad sudo password attempts.
+  Defaults	mail_badpass
+  # Secure paths for the sudo user.
+  Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/bin:/sbin:/bin"
+  # Message because of entering a wrong password.
+  Defaults	badpass_message="Computer says no."
+  # Max password tried when using sudo.
+  Defaults	passwd_tries=3
+  # Defining a logfile for commands used with sudo.
+  Defaults	logfile="/var/log/sudo.log"
+  # Define that input and output should be locked.
+  Defaults	log_input, log_output
+  # Requires the user to be logged into a terminal to run the sudo command.
+  Defaults	requiretty
+
+  # User privilege specifications (add your user)
+  user42  ALL=(ALL:ALL) ALL
+  ```
+  ## Crontab Configuation
+   > Crontab is used to automate repetitive tasks, such as system backups, log rotation, and software updates, without requiring manual intervention
+   1. Install net-tools `apt-get install -y net-tools`
+   2. Then navigate to `/usr/local/bin/`
+   3. Create your script file `touch monitoring.sh`
+   > You can check with `ls`if it created the file
+   4. Give the file the correct executables: `chmod 777 monitoring.sh`
+   > The command gives full permissions to the owner, group, and other users, allowing them to read, write, and execute the "monitoring.sh" file
+   
