@@ -37,4 +37,15 @@
   > PASS_MAX_DAYS 30 \
   > PASS_MIN_DAYS 2 \
   > PASS_WARN_AGE 7
-  
+  16. Rebott for the changes to take effect: `sudo reboot`
+  17. this change only takes effect for newly created users. You will have to manually change it for the existing user via:
+  > \# -m for PASS_MIN_DAYS -M for PASS_MAX_DAYS and -W for PASS_WARN_AGE
+  > chage -m 2 -M 30 -W 7 user42 \
+  > chage -m 2 -M 30 -W 7 root \
+  > \# Check if rules have been applied. \
+  > chage -l user42 \
+  > chage -l root
+ ## Groups
+  > to view all users: `cut -d: -f1 /etc/passwd` \
+  > To add a new user: `sudo adduser new_username`\
+  > To view which groups your user is part of: `groups`
