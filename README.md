@@ -34,7 +34,7 @@
   > \# Words are spaces with tabs \
   > password   requisite   pam_pwquality.so \
   > The above takes the changes at `pwquality.conf` and applies it to the password policy
-  15. Edit the file `vim /etc/login.defs`
+  15. Edit the file `vim /etc/login.defs` with the following as per instructions:
   > PASS_MAX_DAYS 30 \
   > PASS_MIN_DAYS 2 \
   > PASS_WARN_AGE 7
