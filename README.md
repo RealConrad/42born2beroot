@@ -2,9 +2,13 @@
 
 ## Starting Virtual Machine Up:
   1. Install software (Debian, VirtualBox etc)
-  2. Setup OS on Virtual Machine
-  3. Log into it via passphrase and login details you created when setting up
-  4. Type `lsblk` in your Virtual Machine to see the partition
+  2. Once installed, open VB and create a new VM by clicking 'new'
+  3. Follow the steps.
+  4. Once done, select the VM you just created and click 'Start'.
+  5. Onces started, use your arrow keys and select 'Install' (once hover over it, click 'Enter')
+  6. Go through the installation procedure.
+  7. Log into it via passphrase and login details you created when setting up
+  8. Type `lsblk` in your Virtual Machine to see the partition
  
  ## Configuring your Virtual Machine:
   1. Go to the root directory using `su -` and login
