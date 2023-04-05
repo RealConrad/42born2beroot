@@ -9,6 +9,7 @@
  ## Configuring your Virtual Machine:
   1. Go to the root directory using `su -` and login
   2. Install Sudo `apt install sudo`
+  > "Apt" is a command-line package manager used in Debian-based Linux systems. It is short for "Advanced Package Tool" and is used to install,          upgrade, and remove software packages on the system
   3. Add a group called `user42` using `groupadd`
   4. Add the user to the newly created group (adds user to 2 groups) `usermod -aG user42,sudo cwenz`
   > a = append user to group \
