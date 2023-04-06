@@ -79,7 +79,7 @@
   # User privilege specifications (add your user)
   user42  ALL=(ALL:ALL) ALL
   ```
-  ## Crontab Configuation
+  ## Crontab and Monitoring script Configuation
    > Crontab is used to automate repetitive tasks, such as system backups, log rotation, and software updates, without requiring manual intervention
    1. Install net-tools `apt-get install -y net-tools`
    2. Then navigate to `/usr/local/bin/`
