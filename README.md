@@ -134,17 +134,17 @@
    scmd=$(journalctl _COMM=sudo | grep "COMMAND" | wc -l)
    
    wall "	#Architecture:		${ak}
-	        #CPU physical:		${pcpu}
-	        #vCPU:			${vcpu}
-	        #Memory Usage:		${uram}/${tram}MB (${pram}%)
-          	#Disk Usage:		${udisk}/${tdisk}GB ($p{disk}%)
-	        #CPU load:		${}
+	  	#CPU physical:		${pcpu}
+	  	#vCPU:			${vcpu}
+	 	#Memory Usage:		${uram}/${tram}MB (${pram}%)
+        	#Disk Usage:		${udisk}/${tdisk}GB ($p{disk}%)
+	   	#CPU load:		${cpu_per}
           	#Last boot:		${lrb}
-	        #LVM use:		${lvm}
-	        #Connections TCP:	${tcp} 
-	        #User log:		${users}
-	        #Network:		IP ${ipv4} ${mac}
-	        #Sudo:			${scmd}
+		#LVM use:		${lvm}
+		#Connections TCP:	${tcp} 
+		#User log:		${users}
+		#Network:		IP ${ipv4} ${mac}
+		#Sudo:			${scmd}
         "
    ```
    ## Explanations:
@@ -152,7 +152,7 @@
    >  1. `grep` is used to search for a specified pattern or regular expression in a file or set of files 
    > 2. `awk` reads each line of the input file(s) and applies the specified pattern and action(s) to each line that matches the pattern. \
    > Basic sytax is: `awk 'pattern' { action }' file`
-   #### 1. Get the system arhitecture an kernal version
+   #### 1. Get the system architecture and kernal version
    
    `ak=$(uname -a)`
    > 1. `uname` Used to print system information about the current operating system
