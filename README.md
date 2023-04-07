@@ -123,6 +123,16 @@
    # Get the number of active connections (TCP)
    tcp=$(ss -tuna state established | wc -l)
    
+   # Get the number of users using the server
+   users=$(who | wc -l)
+   
+   # Get the IPv4 and MAC address
+   ipv4=$(hostname -I)
+   mac=$(ip link show | grep "ether" | awk '{print $2}')
+   
+   # Get the number of commands executed with the sudo program
+   scmd=$(journalctl _COMM=sudo | grep "COMMAND" | wc -l)
+   
    wall "	#Architecture:		${ak}
 	        #CPU physical:		${pcpu}
 	        #vCPU:			${vcpu}
@@ -132,15 +142,16 @@
           	#Last boot:		${lrb}
 	        #LVM use:		${lvm}
 	        #Connections TCP:	${tcp} 
-	        #User log:		${}
-	        #Network:		${}
-	        #Sudo:			${}
+	        #User log:		${users}
+	        #Network:		IP ${ipv4} ${mac}
+	        #Sudo:			${scmd}
         "
    ```
    ## Explanations:
    ### General commands:
-   > 'grep' is used to search for a specified pattern or regular expression in a file or set of files \
-   > 
+   >  1. `grep` is used to search for a specified pattern or regular expression in a file or set of files 
+   > 2. `awk` reads each line of the input file(s) and applies the specified pattern and action(s) to each line that matches the pattern. \
+   > Basic sytax is: `awk 'pattern' { action }' file`
    #### 1. Get the system arhitecture an kernal version
    
    `ak=$(uname -a)`
@@ -180,7 +191,7 @@
   > 2. `awk '{print $3, $4}'`: the output of who `-b` is piped to the `awk` command, which is used to print the third and fourth fields of the output. These fields represent the date and time of the system boot
 
 
-#### 8.Determine whether or not the LVM is active
+   #### 8.Determine whether or not the LVM is active
    `lvm=$(if [ $(lblk | grep "lvm" | wc -l) eq 0 ]; then echo no; else echo yes; fi)`
    > 1. `lsblk`: the lsblk command is used to display information about the block devices on the system, including disks and partitions 
    > 2. `grep "lvm"`: the output of lsblk is piped to the grep command, which is used to search for lines containing the string "lvm". If LVM is active on the system, there will be one or more lines containing this string 
@@ -188,7 +199,7 @@
    > 4. `if [ $(lblk | grep "lvm" | wc -l) eq 0 ]; then echo no; else echo yes; fi`: this is an if statement that checks whether the line count from the previous command is equal to zero. If the line count is zero, then LVM is not active on the system, and the script echoes "no" using the echo command. If the line count is non-zero, then LVM is active on the system, and the script echoes "yes" using the echo command.
 
 
-#### 9. Get the number of active connections (TCP)
+   #### 9. Get the number of active connections (TCP)
    `tcp=$(ss -tuna state established | wc -l)`
    > 1. `ss`: is used to display information about active network connections 
    > 2. `-tuna`: specifies the options to the ss command to show only TCP (-t) and UDP (-u) connections in numeric format (-n) and all listening and non-listening sockets (-a) 
@@ -196,4 +207,22 @@
    > 4. `wc`: count lines, words, and characters in the input 
    > 5. `-l` specifies the option to the wc command to count only the number of lines in the input.
    
-   
+   #### 10. Get the number of users using the server
+   `users=$(who | wc -l)`
+   > 1. `who`: the `who` command is used to display information about the currently logged-in users on the system 
+   > 2. ` wc -l`: Counts the number of lines of the ouput of `who`
+
+   #### 11. Get the IPv4 and MAC address
+   ```
+   ipv4=$(hostname -I)
+   mac=$(ip link show | grep "ether" | awk '{print $2}')
+   ```
+   > 1. `ipv4=$(hostname -I)`: the `hostname` command is used to retrieve the hostname of the system, and the -I option is used to retrieve the IP address(es) assigned to the system's network interfaces 
+   > 2. `mac=$(ip link show | grep "ether" | awk '{print $2}')`: the `ip` command is used to display information about the network interfaces on the system, including their MAC addresses. The `link show` subcommand is used to show the link-layer information for all interfaces, and the output is piped to the `grep` command to filter out all lines except those containing the string "ether". The resulting output is then piped to the `awk` command, which is used to print the second field of each line
+
+
+   #### 12. Get the number of commands executed by the sudo program
+   `scmd=$(journalctl _COMM=sudo | grep "COMMAND" | wc -l)`
+   > 1. `journalctl _COMM=sudo`: the `journalctl` command is used to query the system journal for logs. The `_COMM` option is used to filter the logs by the specified process name, which in this case is "sudo" 
+   > 2. `grep "COMMAND"`: the output of journalctl is piped to the `grep` command, which is used to filter the output to only display logs containing the string "COMMAND" 
+   > 3. `wc -l`: the output of grep is piped to the wc command with the `-l` option, which counts the number of lines in the output
