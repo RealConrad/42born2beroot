@@ -120,7 +120,15 @@
    lrb=$(who -b | awk '{print $3, $4}')
    
    # Determine whether or not the LVM is active
-   lvm=$(if [$(lblk | grep "lvm" | wc -l) eq 0]; then echo no; else echo yes; fi)
+   lvm=$(if [ $(lblk | grep "lvm" | wc -l) eq 0 ]; then echo no; else echo yes; fi)
+   
+   # Get the number of active connections (TCP)
+   ## 'ss' is used to display information about active network connections
+   ## -tuna: specifies the options to the ss command to show only TCP (-t) and UDP (-u) connections in numeric format (-n) and all listening and non-		listening sockets (-a)
+   ##  '|' pipes the output of the ss command to the next command.
+   ##  'wc' count lines, words, and characters in the input.
+   ##  '-l' specifies the option to the wc command to count only the number of lines in the input.
+   tcp=$(ss -tuna state established | wc -l)
    
    wall "	#Architecture:		${ak]}
 	        #CPU physical:		${pcpu}
@@ -130,7 +138,7 @@
 	        #CPU load:		${}
           	#Last boot:		${lrb}
 	        #LVM use:		${lvm}
-	        #Connections TCP:	${} 
+	        #Connections TCP:	${tcp} 
 	        #User log:		${}
 	        #Network:		${}
 	        #Sudo:			${}
