@@ -102,10 +102,37 @@
    ## 'grep' is used to search for a specified pattern or regular expression in a file or set of files, in our case it searches for 'processor'
    vcpu=$(/proc/cpuinfo | grep processor | wc l)
    
-   # Get the curent RAM on server andd its utiliation rate as a percentage
+   # Get the curent RAM on server andd its utilization rate as a percentage
    ## 'awk' is used for processing and manipulating text files, in our case it reads the 1st row "Mem" and adds it the variable 'total'
    tram=$(free -m | awk '$1 == "Mem:" {print $2}')
    uram=$(free -m | awk '$1 == "Mem:" {print $3}')
    pram=$(free | awk '$1 == "Mem:" {printf("%.2f"), $3/$2*100}')
    
+   # Get current avaliable memory on server an its utilization as a percentage
+   tdisk=$(df -BG | grep '^/dev/' | grep -v '/boot$' | awk '{total += $2} END {print total}')
+   udisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{used += $3} END {print used}')
+   tdisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{total += $2} {used += $3} END {printf("%d"),used/total*100}')
+   
+   # Get current utilization rate of processors as percentage
+   
+   
+   # Get the date/time of last reboot
+   lrb=$(who -b | awk '{print $3, $4}')
+   
+   # Determine whether or not the LVM is active
+   lvm=$(if [$(lblk | grep "lvm" | wc -l) eq 0]; then echo no; else echo yes; fi)
+   
+   wall "	#Architecture:        ${ak]}
+	        #CPU physical:        ${pcpu}
+	        #vCPU:                ${vcpu}
+	        #Memory Usage:        ${uram}/${tram}MB (${pram}%)
+          #Disk Usage:          ${udisk}/${tdisk}GB ($p{disk}%)
+	        #CPU load:            $
+          #Last boot:           ${lrb}
+	        #LVM use:             ${lvm}
+	        #Connections TCP: 
+	        #User log: 
+	        #Network: 
+	        #Sudo:
+        "
    ```
