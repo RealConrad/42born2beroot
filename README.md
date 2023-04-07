@@ -99,11 +99,9 @@
    pcpu=$(nproc)
    
    # Get the numbr of virtual processors
-   ## 'grep' is used to search for a specified pattern or regular expression in a file or set of files, in our case it searches for 'processor'
    vcpu=$(grep "^processor" /proc/cpuinfo | wc -l)
    
-   # Get the curent RAM on server andd its utilization rate as a percentage
-   ## 'awk' is used for processing and manipulating text files, in our case it reads the 1st row "Mem" and adds it the variable 'total'
+   # Get the curent RAM on server and its utilization rate as a percentage
    tram=$(free -m | awk '$1 == "Mem:" {print $2}')
    uram=$(free -m | awk '$1 == "Mem:" {print $3}')
    pram=$(free | awk '$1 == "Mem:" {printf("%.2f"), $3/$2*100}')
@@ -123,14 +121,9 @@
    lvm=$(if [ $(lblk | grep "lvm" | wc -l) eq 0 ]; then echo no; else echo yes; fi)
    
    # Get the number of active connections (TCP)
-   ## 'ss' is used to display information about active network connections
-   ## -tuna: specifies the options to the ss command to show only TCP (-t) and UDP (-u) connections in numeric format (-n) and all listening and non-		listening sockets (-a)
-   ##  '|' pipes the output of the ss command to the next command.
-   ##  'wc' count lines, words, and characters in the input.
-   ##  '-l' specifies the option to the wc command to count only the number of lines in the input.
    tcp=$(ss -tuna state established | wc -l)
    
-   wall "	#Architecture:		${ak]}
+   wall "	#Architecture:		${ak}
 	        #CPU physical:		${pcpu}
 	        #vCPU:			${vcpu}
 	        #Memory Usage:		${uram}/${tram}MB (${pram}%)
@@ -144,3 +137,63 @@
 	        #Sudo:			${}
         "
    ```
+   ## Explanations:
+   ### General commands:
+   > 'grep' is used to search for a specified pattern or regular expression in a file or set of files \
+   > 
+   #### 1. Get the system arhitecture an kernal version
+   
+   `ak=$(uname -a)`
+   > 1. `uname` Used to print system information about the current operating system
+   > 2. `-a` Is used to display all information
+   #### 2. Get number of physical processors
+   
+   `pcpu=$(nproc)`
+   > 1. `nrpoc` Outputs the number of available processing units to the standard output
+   #### 3. Get the numbr of virtual processors
+   
+   `vcpu=$(grep "^processor" /proc/cpuinfo | wc -l)`
+   > 1. `grep "^processor" /proc/cpuinfo`: the `grep` command is used to search for lines in the `/proc/cpuinfo` file that start with the string "processor", which is used to denote each CPU thread on the system.
+   > 2. `wc -l`: the output of grep is piped to the `wc` (word count) command with the `-l` option, which counts the number of lines in the output
+
+  #### 4. Get the curent RAM on server andd its utilization rate as a percentage
+   ```
+   tram=$(free -m | awk '$1 == "Mem:" {print $2}')
+   uram=$(free -m | awk '$1 == "Mem:" {print $3}')
+   pram=$(free | awk '$1 == "Mem:" {printf("%.2f"), $3/$2*100}')
+   ```
+   > 1.`free -m`: the free command is used to display information about the memory usage on the system, including the total amount of memory available, used, and free. The -m option is used to display the memory usage in megabytes. \
+   > 2. `awk '$1 == "Mem:" {print $2}'`: the output of `free -m` is piped to the `awk` command, which is used to search for the line that starts with the string "Mem:" and print the second field \
+   > 3. `awk '$1 == "Mem:" {printf("%.2f"), $3/$2*100}'`: The output of `free` is piped to the `awk` command, which is used to search for the line that starts with the string "Mem:" and print the percentage of memory used. This is calculated by dividing the third field (memory used) by the second field (total memory), multiplying the result by 100, and formatting it to two decimal places using the printf function.
+
+  #### 5. Get current avaliable memory on server an its utilization as a percentage
+   ```
+   tdisk=$(df -BG | grep '^/dev/' | grep -v '/boot$' | awk '{total += $2} END {print total}')
+   udisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{used += $3} END {print used}')
+   tdisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{total += $2} {used += $3} END {printf("%d"),used/total*100}')
+   ```
+  #### 6. Get current utilization rate of processors as percentage
+  
+  #### 7. Get the date/time of last reboot
+  `lrb=$(who -b | awk '{print $3, $4}')`
+  > 1. `who -b`: the who command is used to display information about the currently logged in users on the system. The `-b` option is used to display information about the system boot time 
+  > 2. `awk '{print $3, $4}'`: the output of who `-b` is piped to the `awk` command, which is used to print the third and fourth fields of the output. These fields represent the date and time of the system boot
+
+
+#### 8.Determine whether or not the LVM is active
+   `lvm=$(if [ $(lblk | grep "lvm" | wc -l) eq 0 ]; then echo no; else echo yes; fi)`
+   > 1. `lsblk`: the lsblk command is used to display information about the block devices on the system, including disks and partitions 
+   > 2. `grep "lvm"`: the output of lsblk is piped to the grep command, which is used to search for lines containing the string "lvm". If LVM is active on the system, there will be one or more lines containing this string 
+   > 3. `wc -l`: the output of grep is piped to the wc command with the `-l` option, which counts the number of lines in the output. If LVM is active on the system, there will be one or more lines containing the string "lvm", resulting in a non-zero line count 
+   > 4. `if [ $(lblk | grep "lvm" | wc -l) eq 0 ]; then echo no; else echo yes; fi`: this is an if statement that checks whether the line count from the previous command is equal to zero. If the line count is zero, then LVM is not active on the system, and the script echoes "no" using the echo command. If the line count is non-zero, then LVM is active on the system, and the script echoes "yes" using the echo command.
+
+
+#### 9. Get the number of active connections (TCP)
+   `tcp=$(ss -tuna state established | wc -l)`
+   > 1. `ss`: is used to display information about active network connections 
+   > 2. `-tuna`: specifies the options to the ss command to show only TCP (-t) and UDP (-u) connections in numeric format (-n) and all listening and non-listening sockets (-a) 
+   > 3. `|`: pipes the output of the ss command to the next command 
+   > 4. `wc`: count lines, words, and characters in the input 
+   > 5. `-l` specifies the option to the wc command to count only the number of lines in the input.
+   
+   
