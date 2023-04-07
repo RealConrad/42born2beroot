@@ -87,4 +87,25 @@
    > You can check with `ls`if it created the file
    4. Give the file the correct executables: `chmod 777 monitoring.sh`
    > The command gives full permissions to the owner, group, and other users, allowing them to read, write, and execute the "monitoring.sh" file
+   5. Open the script file via `vim` or `nano`
+   6. Add the following:
+   ```
+   #!/bin/bash
    
+   # Get the system arhitecture an kernal version
+   ak=$(uname -a)
+   
+   # Get number of physical processors
+   pcpu=$(nproc)
+   
+   # Get the numbr of virtual processors
+   ## 'grep' is used to search for a specified pattern or regular expression in a file or set of files, in our case it searches for 'processor'
+   vcpu=$(/proc/cpuinfo | grep processor | wc l)
+   
+   # Get the curent RAM on server andd its utiliation rate as a percentage
+   ## 'awk' is used for processing and manipulating text files, in our case it reads the 1st row "Mem" and adds it the variable 'total'
+   tram=$(free -m | awk '$1 == "Mem:" {print $2}')
+   uram=$(free -m | awk '$1 == "Mem:" {print $3}')
+   pram=$(free | awk '$1 == "Mem:" {printf("%.2f"), $3/$2*100}')
+   
+   ```
