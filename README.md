@@ -100,7 +100,7 @@
    
    # Get the numbr of virtual processors
    ## 'grep' is used to search for a specified pattern or regular expression in a file or set of files, in our case it searches for 'processor'
-   vcpu=$(/proc/cpuinfo | grep processor | wc l)
+   vcpu=$(grep "^processor" /proc/cpuinfo | wc -l)
    
    # Get the curent RAM on server andd its utilization rate as a percentage
    ## 'awk' is used for processing and manipulating text files, in our case it reads the 1st row "Mem" and adds it the variable 'total'
@@ -122,17 +122,17 @@
    # Determine whether or not the LVM is active
    lvm=$(if [$(lblk | grep "lvm" | wc -l) eq 0]; then echo no; else echo yes; fi)
    
-   wall "	#Architecture:        ${ak]}
-	        #CPU physical:        ${pcpu}
-	        #vCPU:                ${vcpu}
-	        #Memory Usage:        ${uram}/${tram}MB (${pram}%)
-          #Disk Usage:          ${udisk}/${tdisk}GB ($p{disk}%)
-	        #CPU load:            $
-          #Last boot:           ${lrb}
-	        #LVM use:             ${lvm}
-	        #Connections TCP: 
-	        #User log: 
-	        #Network: 
-	        #Sudo:
+   wall "	#Architecture:		${ak]}
+	        #CPU physical:		${pcpu}
+	        #vCPU:			${vcpu}
+	        #Memory Usage:		${uram}/${tram}MB (${pram}%)
+          	#Disk Usage:		${udisk}/${tdisk}GB ($p{disk}%)
+	        #CPU load:		${}
+          	#Last boot:		${lrb}
+	        #LVM use:		${lvm}
+	        #Connections TCP:	${} 
+	        #User log:		${}
+	        #Network:		${}
+	        #Sudo:			${}
         "
    ```
