@@ -148,7 +148,7 @@
         "
    ```
    ## Explanations:
-   ### General commands:
+   #### General commands:
    >  1. `grep` is used to search for a specified pattern or regular expression in a file or set of files 
    > 2. `awk` reads each line of the input file(s) and applies the specified pattern and action(s) to each line that matches the pattern. \
    > Basic sytax is: `awk 'pattern' { action }' file`
