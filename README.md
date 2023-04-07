@@ -112,7 +112,7 @@
    tdisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{total += $2} {used += $3} END {printf("%d"),used/total*100}')
    
    # Get current utilization rate of processors as percentage
-   
+   cpu_per=$(top -bn1 | grep '^$Cpu' | cut -c 9- | xargs | awk '{print("%.1f"), $1 + $3')
    
    # Get the date/time of last reboot
    lrb=$(who -b | awk '{print $3, $4}')
@@ -184,6 +184,12 @@
    tdisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{total += $2} {used += $3} END {printf("%d"),used/total*100}')
    ```
   #### 6. Get current utilization rate of processors as percentage
+  `cpu_per=$(top -bn1 | grep '^$Cpu' | cut -c 9- | xargs | awk '{print("%.1f"), $1 + $3')`
+  > 1. `top -bn1`: the top command is used to display real-time information about the system's processes and resource usage. The -b option is used to run top in batch mode, and the -n1 option is used to run it for a single iteration, without continuously updating the display 
+  > 2. `grep '^%Cpu'`: the output of top is piped to the `grep` command, which is used to filter the output to only display the lines starting with %Cpu 
+  > 3. `cut -c 9-`: the output of grep is piped to the cut command, which is used to remove the first eight characters of each line. These characters contain the %Cpu(s): label, which is not needed for the calculation 
+  > 4. `xargs`: the output of cut is piped to the xargs command, which is used to remove any leading or trailing whitespace characters 
+  > 5. `awk '{print("%.1f"), $1 + $3}'`: the output of `xargs` is piped to the `awk` command, which is used to calculate the current CPU utilization as a percentage. The print function is used to print the result, formatted to one decimal place, and the `$1 + $3` expression is used to add the values of the CPU utilization percentages for user and system processes
   
   #### 7. Get the date/time of last reboot
   `lrb=$(who -b | awk '{print $3, $4}')`
