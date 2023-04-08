@@ -59,21 +59,21 @@
   1. Run `visudo`
   2. Add the following:
   ```
-  # Resets terminal environment to remove any user variable.
+  # Clears out any variables that the user may have set in the terminal environment to start fresh
   Defaults	env_reset
-  # Sends a mail of bad sudo password attempts.
+  # Sends a mail of bad sudo password attempts
   Defaults	mail_badpass
-  # Secure paths for the sudo user.
+  # Secure paths for the sudo user
   Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/bin:/sbin:/bin"
-  # Message because of entering a wrong password.
-  Defaults	badpass_message="Computer says no."
-  # Max password tried when using sudo.
+  # Message when entering a wrong password
+  Defaults	badpass_message="Incorrect password"
+  # Max number of password attempts
   Defaults	passwd_tries=3
-  # Defining a logfile for commands used with sudo.
+  # Defining a to store sudo commands
   Defaults	logfile="/var/log/sudo.log"
-  # Define that input and output should be locked.
+  # Define that input and output should be locked
   Defaults	log_input, log_output
-  # Requires the user to be logged into a terminal to run the sudo command.
+  # Requires the user to be logged into a terminal to run the sudo command
   Defaults	requiretty
 
   # User privilege specifications (add your user)
@@ -232,3 +232,14 @@
    > 1. `journalctl _COMM=sudo`: the `journalctl` command is used to query the system journal for logs. The `_COMM` option is used to filter the logs by the specified process name, which in this case is "sudo" 
    > 2. `grep "COMMAND"`: the output of journalctl is piped to the `grep` command, which is used to filter the output to only display logs containing the string "COMMAND" 
    > 3. `wc -l`: the output of grep is piped to the wc command with the `-l` option, which counts the number of lines in the output
+
+## Crontab setup
+1. Exit out your iTerm and go back to your virutal machine (if not already)
+2. Type `sudo visudo` to open your sudoers file
+3. Add in this line `your_username ALL=(ALL) NOPASSWD: /usr/local/bin/monitoring.sh` under where its written `%sudo ALL=(ALL:ALL) ALL`
+4. Save and exit
+5. Reboot sudo with `sudo reboot`
+6. Run `sudo /usr/local/bin/monitoring.sh` to execute your script
+7. Type `sudo crontab -u root -e` to open the crontab and add the rule `*/10 * * * * /usr/local/bin/monitoring.sh` at the bottom of the file
+> The above rule means that the script will run every 10 minutes \
+> crontab takes 5 inputs: `minutes, hour, day (month), month, and day (week)`
