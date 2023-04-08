@@ -112,7 +112,7 @@
    tdisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{total += $2} {used += $3} END {printf("%d"),used/total*100}')
    
    # Get current utilization rate of processors as percentage
-   cpu_per=$(top -bn1 | grep '^$Cpu' | cut -c 9- | xargs | awk '{print("%.1f"), $1 + $3')
+   cpu_per=$(top -bn1 | grep '^$Cpu' | cut -c 9- | xargs | awk '{print("%.1f"), $1 + $3}')
    
    # Get the date/time of last reboot
    lrb=$(who -b | awk '{print $3, $4}')
