@@ -250,3 +250,64 @@
 > Replace `name` with whatever you named your VM
 3. Copy the output number and create a signature.txt file and paste that number in the file.
 4. Push that file to the repo.
+
+
+# Evaluation
+#### Why did I choose Debian?
+Easier to install and setup. PDF reccommended it
+
+#### Difference Debian and CentOS
+1. Package Management: Rocky Linux uses the `dnf` package manager, which is a newer package management tool that is compatible with the RHEL and Fedora distributions. Debian, on the other hand, uses the `apt` package manager, which is a well-established tool that has been used by Debian and its derivatives for many years.
+2. Default Configuration: Rocky Linux is configured with a minimal set of packages, which makes it more suitable for server installations. Debian, on the other hand, includes a more complete set of packages by default, which makes it more suitable for desktop installations.
+
+#### What is a Virtual Machine?
+Computer in a computer essentially. Its a resource that uses software instead of a physically computer to run programs. Works by the VM borrowing resources from the main PC. You can use a VM to test applications/software in a safe environment as it wont affect your main PC.
+
+#### What is the difference between aptitude and APT (Advanced Packaging Tool)?
+1. Aptitude is a high-level package manager while APT is lower level which can be used by other higher level package managers
+Aptitude is smarter and will automatically remove unused packages or suggest installation of dependent packages
+2. Apt will only do explicitly what it is told to do in the command line
+
+#### What is AppArmor?
+Linux security system that provides Mandatory Access Control (MAC) security. Allows the system admin to restrict the actions that processes can perform. It is included by default with Debian. Run aa-status to check if it is running.
+
+#### Password Rules
+For the password rules, we use the password quality checking library and there are two files the `common-password` file which sets the rules like upper and lower case characters, duplicate characters, digits etc.. and the `login.defs` file which stores the password expiration rules (30 days etc). `Sudo nano /etc/login.defs` `Sudo nano /etc/pam.d/common-password`
+
+#### What is LVM
+1. Logical Volume Manager – allows us to easily manipulate the partitions or logical volume on a storage device.
+2. Partition is a logical section of a hard disk drive or other storage device that is created to store data. 
+3. A logical volume, on the other hand, is a virtualized partition that is created from one or more physical partitions or disks.
+
+#### UFW (Uncomplicated Firewall)
+UFW is a interface to modify the firewall of the device without compromising security. You use it to configure which ports to allow/close connections. This is useful in conjunction with SSH, can set a specific port for it to work with.
+
+#### What is SSH?
+SSH (Secure Shell) is a secure method of communication between a client and a host that encrypts all communication to ensure data is transmitted securely.
+
+#### What is Cron?
+Cron or cron job is a command line utility to schedule commands or scripts to happen at specific intervals or a specific time each day. Useful if you want to set your server to restart at a specific time each day.
+
+> `cd /usr/local/bin` – to show `monitoring.sh` \
+> `sudo crontab -u root -e` – to edit the cron job \
+> change script to `*/1 * * * * sleep 30s && script path` – to run it every 30 seconds, delete the line to stop the job from running.
+
+#### Evaluation Commands for UFW, Group, Host, lsblk and SSH
+`sudo ufw status` - Get firewall status
+`sudo systemctl status ssh` - Used to check if ssh is running, any errors/warnings and info about service
+`getent group sudo` - Gets the group `sudo`
+`getent group user42`
+`sudo adduser new username`
+`sudo groupadd groupname`
+`sudo usermod -aG groupname username` - Adds a user to a group
+`sudo chage -l username` - check password expire rules
+`hostnamectl` - view hostname
+`hostnamectl set-hostname new_hostname` - to change the current hostname
+Restart your Virtual Machine.
+`sudo nano /etc/hosts` - change current hostname to new hostname
+`lsblk` to display the partitions
+`dpkg -l | grep sudo` – to show that sudo is installed
+`sudo ufw status numbered`
+`sudo ufw allow port-id`
+`sudo ufw delete rule number`
+`ssh your_user_id@127.0.0.1 -p 4242` - do this in terminal to show that SSH to port 4242 is working
