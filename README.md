@@ -310,4 +310,4 @@ Cron or cron job is a command line utility to schedule commands or scripts to ha
 * `sudo ufw status numbered`
 * `sudo ufw allow port-id`
 * `sudo ufw delete rule number`
-* `ssh your_user_id@127.0.0.1 -p 4242` - do this in terminal to show that SSH to port 4242 is working
+* `ssh user@127.0.0.1 -p 4242` - do this in terminal to show that SSH to port 4242 is working
