@@ -244,3 +244,9 @@
 > The above rule means that the script will run every 10 minutes \
 > crontab takes 5 inputs: `minutes, hour, day (month), month, and day (week)`
 
+## Signiture file setup
+1. Open iTerm and navigate to where you saved your VM
+2. Once your in the correct directory type `shasum {name}.vdi`
+> Replace `name` with whatever you named your VM
+3. Copy the output number and create a signature.txt file and paste that number in the file.
+4. Push that file to the repo.
