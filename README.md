@@ -303,7 +303,7 @@ Cron or cron job is a command line utility to schedule commands or scripts to ha
 * `sudo chage -l username` - check password expire rules
 * `hostnamectl` - view hostname
 * `hostnamectl set-hostname new_hostname` - to change the current hostname
-Restart your Virtual Machine.
+* Restart your Virtual Machine.
 * `sudo nano /etc/hosts` - change current hostname to new hostname
 * `lsblk` to display the partitions
 * `dpkg -l | grep sudo` – to show that sudo is installed
