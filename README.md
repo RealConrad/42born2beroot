@@ -243,3 +243,4 @@
 7. Type `sudo crontab -u root -e` to open the crontab and add the rule `*/10 * * * * /usr/local/bin/monitoring.sh` at the bottom of the file
 > The above rule means that the script will run every 10 minutes \
 > crontab takes 5 inputs: `minutes, hour, day (month), month, and day (week)`
+
