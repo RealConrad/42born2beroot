@@ -64,13 +64,13 @@
   # Sends a mail of bad sudo password attempts
   Defaults	mail_badpass
   # Secure paths for the sudo user
-  Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/bin:/sbin:/bin"
+  Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/bin:/sbin:/bin:/snap/bin"
   # Message when entering a wrong password
   Defaults	badpass_message="Incorrect password"
   # Max number of password attempts
   Defaults	passwd_tries=3
   # Defining a to store sudo commands
-  Defaults	logfile="/var/log/sudo.log"
+  Defaults	logfile="/var/log/sudo/sudo.log"
   # Define that input and output should be locked
   Defaults	log_input, log_output
   # Requires the user to be logged into a terminal to run the sudo command
