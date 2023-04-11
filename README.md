@@ -77,7 +77,7 @@
   Defaults	requiretty
 
   # User privilege specifications (add your user)
-  user42  ALL=(ALL:ALL) ALL
+  username  ALL=(ALL:ALL) ALL
   ```
   ## Crontab and Monitoring script Configuation
    > Crontab is used to automate repetitive tasks, such as system backups, log rotation, and software updates, without requiring manual intervention
