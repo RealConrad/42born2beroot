@@ -96,10 +96,10 @@
    ak=$(uname -a)
    
    # Get number of physical processors
-   pcpu=$(nproc)
+   pcpu=$(grep "physical id" /proc/cpuinfo | uniq | wc -l)
    
    # Get the numbr of virtual processors
-   vcpu=$(grep "^processor" /proc/cpuinfo | wc -l)
+   vcpu=$(nproc --all)
    
    # Get the curent RAM on server and its utilization rate as a percentage
    tram=$(free -m | awk '$1 == "Mem:" {print $2}')
@@ -107,12 +107,12 @@
    pram=$(free | awk '$1 == "Mem:" {printf("%.2f"), $3/$2*100}')
    
    # Get current avaliable memory on server an its utilization as a percentage
-   tdisk=$(df -BG | grep '^/dev/' | grep -v '/boot$' | awk '{total += $2} END {print total}')
+   tdisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{total += $2} END {print total}')
    udisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{used += $3} END {print used}')
-   tdisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{total += $2} {used += $3} END {printf("%d"),used/total*100}')
+   pdisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{total += $2} {used += $3} END {printf("%d"),used/total*100}')
    
    # Get current utilization rate of processors as percentage
-   cpu_per=$(top -bn1 | grep '^$Cpu' | cut -c 9- | xargs | awk '{print("%.1f"), $1 + $3}')
+   cpu_per=$(vmstat 1 2 | awk 'NR == 4 {print 100 - $15}')
    
    # Get the date/time of last reboot
    lrb=$(who -b | awk '{print $3, $4}')
@@ -121,10 +121,10 @@
    lvm=$(if [ $(lblk | grep "lvm" | wc -l) eq 0 ]; then echo no; else echo yes; fi)
    
    # Get the number of active connections (TCP)
-   tcp=$(ss -tuna state established | wc -l)
+   tcp=$(netstat -an | grep "ESTABLISHED" | wc -l)
    
    # Get the number of users using the server
-   users=$(who | wc -l)
+   users=$(users | tr ' ' '\n' | sort | uniq | wc -l)
    
    # Get the IPv4 and MAC address
    ipv4=$(hostname -I)
@@ -137,7 +137,7 @@
 	  	#CPU physical:		${pcpu}
 	  	#vCPU:			${vcpu}
 	 	#Memory Usage:		${uram}/${tram}MB (${pram}%)
-        	#Disk Usage:		${udisk}/${tdisk}GB ($p{disk}%)
+        	#Disk Usage:		${udisk}/${tdisk}MB (${pdisk}%)
 	   	#CPU load:		${cpu_per}
           	#Last boot:		${lrb}
 		#LVM use:		${lvm}
