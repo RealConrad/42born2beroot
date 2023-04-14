@@ -159,13 +159,12 @@
    > 2. `-a` Is used to display all information
    #### 2. Get number of physical processors
    
-   `pcpu=$(nproc)`
-   > 1. `nrpoc` Outputs the number of available processing units to the standard output
+   `pcpu=$(grep "physical id" /proc/cpuinfo | uniq | wc -l)`
+   > 1. Contains information about the system's CPUs. The `uniq` filters out any possible duplicates.
    #### 3. Get the numbr of virtual processors
    
-   `vcpu=$(grep "^processor" /proc/cpuinfo | wc -l)`
-   > 1. `grep "^processor" /proc/cpuinfo`: the `grep` command is used to search for lines in the `/proc/cpuinfo` file that start with the string "processor", which is used to denote each CPU thread on the system.
-   > 2. `wc -l`: the output of grep is piped to the `wc` (word count) command with the `-l` option, which counts the number of lines in the output
+   `vcpu=$(nproc --all)`
+   > Outputs the number of available processing units to the standard output
 
   #### 4. Get the curent RAM on server andd its utilization rate as a percentage
    ```
@@ -179,17 +178,14 @@
 
   #### 5. Get current avaliable memory on server an its utilization as a percentage
    ```
-   tdisk=$(df -BG | grep '^/dev/' | grep -v '/boot$' | awk '{total += $2} END {print total}')
+   tdisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{total += $2} END {print total}')
    udisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{used += $3} END {print used}')
    tdisk=$(df -BM | grep '^/dev/' | grep -v '/boot$' | awk '{total += $2} {used += $3} END {printf("%d"),used/total*100}')
    ```
   #### 6. Get current utilization rate of processors as percentage
-  `cpu_per=$(top -bn1 | grep '^$Cpu' | cut -c 9- | xargs | awk '{print("%.1f"), $1 + $3')`
-  > 1. `top -bn1`: the top command is used to display real-time information about the system's processes and resource usage. The -b option is used to run top in batch mode, and the -n1 option is used to run it for a single iteration, without continuously updating the display 
-  > 2. `grep '^%Cpu'`: the output of top is piped to the `grep` command, which is used to filter the output to only display the lines starting with %Cpu 
-  > 3. `cut -c 9-`: the output of grep is piped to the cut command, which is used to remove the first eight characters of each line. These characters contain the %Cpu(s): label, which is not needed for the calculation 
-  > 4. `xargs`: the output of cut is piped to the xargs command, which is used to remove any leading or trailing whitespace characters 
-  > 5. `awk '{print("%.1f"), $1 + $3}'`: the output of `xargs` is piped to the `awk` command, which is used to calculate the current CPU utilization as a percentage. The print function is used to print the result, formatted to one decimal place, and the `$1 + $3` expression is used to add the values of the CPU utilization percentages for user and system processes
+  `cpu_per=$(vmstat 1 2 | awk 'NR == 4 {print 100 - $15}')`
+  > 1. `vmstat 1 2`: Display system statistics. The 1 argument specifies the interval in seconds between each output, and the 2 argument specifies the number of times to display the output 
+  > 2. `NR == 4`: This is a condition that tells awk to only process the fourth line of the vmstat output, which contains information about CPU utilization.
   
   #### 7. Get the date/time of last reboot
   `lrb=$(who -b | awk '{print $3, $4}')`
@@ -206,17 +202,12 @@
 
 
    #### 9. Get the number of active connections (TCP)
-   `tcp=$(ss -tuna state established | wc -l)`
-   > 1. `ss`: is used to display information about active network connections 
-   > 2. `-tuna`: specifies the options to the ss command to show only TCP (-t) and UDP (-u) connections in numeric format (-n) and all listening and non-listening sockets (-a) 
-   > 3. `|`: pipes the output of the ss command to the next command 
-   > 4. `wc`: count lines, words, and characters in the input 
-   > 5. `-l` specifies the option to the wc command to count only the number of lines in the input.
+   `tcp=$(netstat -an | grep "ESTABLISHED" | wc -l)`
+   > 1. `netstat -an`: This part of the command uses the netstat utility to display network statistics. The -a option specifies that all connections should be displayed, and the -n option specifies that numeric addresses should be used instead of hostname resolution
    
    #### 10. Get the number of users using the server
-   `users=$(who | wc -l)`
-   > 1. `who`: the `who` command is used to display information about the currently logged-in users on the system 
-   > 2. ` wc -l`: Counts the number of lines of the ouput of `who`
+   `users=$(users | tr ' ' '\n' | sort | uniq | wc -l)`
+   > 1. `users`: Display a list of users currently logged in to the system
 
    #### 11. Get the IPv4 and MAC address
    ```
