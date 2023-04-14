@@ -302,3 +302,5 @@ Cron or cron job is a command line utility to schedule commands or scripts to ha
 * `sudo ufw allow port-id`
 * `sudo ufw delete rule number`
 * `ssh user@127.0.0.1 -p 4242` - do this in terminal to show that SSH to port 4242 is working
+* Password configurtion: `/etc/pam.d/common-password` and `/etc/login.defs`.
+* SSH configuration: `/etc/ssh/sshd_config`
