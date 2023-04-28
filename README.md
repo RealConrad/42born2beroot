@@ -89,7 +89,7 @@
    > The command gives full permissions to the owner, group, and other users, allowing them to read, write, and execute the "monitoring.sh" file
    5. Open the script file via `vim` or `nano`
    6. Add the following:
-   ```
+   ```vim
    #!/bin/bash
    
    # Get the system arhitecture an kernal version
