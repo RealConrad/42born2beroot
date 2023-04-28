@@ -159,7 +159,7 @@
    > 2. `-a` Is used to display all information
    #### 2. Get number of physical processors
    
-   `pcpu=$(grep "physical id" /proc/cpuinfo | uniq | wc -l)`
+   `pcpu=$(grep "physical id" /proc/cpuinfo | sort | uniq | wc -l)`
    > 1. Contains information about the system's CPUs. The `uniq` filters out any possible duplicates.
    #### 3. Get the numbr of virtual processors
    
